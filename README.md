@@ -60,7 +60,7 @@ The notebook scheduling was provided by the platform's built-in scheduler.
 
 ## Workflow Architecture
 
-![Audit Tracker Automation Workflow](docs/images/audit-tracker-automation-workflow.png)
+![Audit Tracker Automation Workflow](docs/images/Workflow-Architecture-(technical).png)
 
 > **Note**
 >
