@@ -196,16 +196,18 @@ python demo/src/run_workflow.py
 The project follows a modular architecture where each module has a single responsibility.
 
 | Module | Responsibility |
-|----------|----------------|
-| `extract_reports.py` | Executes SQL queries and retrieves reports |
-| `group_by_team.py` | Groups reports by operational team |
-| `prepare_tracker_data.py` | Builds tracker-ready datasets |
-| `load_reports.py` | Connects to the SQLite database, executes the supplied SQL query and returns the results as a Pandas DataFrame |
-| `team_mapping.py` | Maps teams to Excel worksheets |
-| `deduplicate_reports.py` | Prevents duplicate report exports |
-| `excel_tracker.py` | Handles Excel workbook operations |
-| `run_workflow.py` | Orchestrates the complete workflow |
-
+|---|---|
+| `create_database.py` | Creates and populates the SQLite database used to simulate the production data source. |
+| `generate_bug_reports.py` | Generates fictional employee issue report pages linked from the audit tracker. |
+| `filter_reports.sql` | Applies the SQL business rules used to identify reports eligible for auditing. |
+| `load_reports.py` | Connects to SQLite, executes the supplied SQL query and returns the result as a Pandas DataFrame. |
+| `extract_reports.py` | Reads the configured SQL file and coordinates report extraction. |
+| `group_by_team.py` | Groups extracted reports by operational team. |
+| `prepare_tracker_data.py` | Builds tracker-ready datasets, including hyperlinks and default audit fields. |
+| `team_mapping.py` | Maps operational teams to Excel worksheets. |
+| `deduplicate_reports.py` | Prevents duplicate report exports. |
+| `excel_tracker.py` | Handles workbook, worksheet, header and row-insertion operations. |
+| `run_workflow.py` | Orchestrates the complete workflow and prints the execution summary. |
 ---
 
 # Issue Reports
