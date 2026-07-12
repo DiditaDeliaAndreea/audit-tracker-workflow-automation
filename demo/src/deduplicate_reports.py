@@ -1,29 +1,24 @@
+import re
+
 import pandas as pd
+
+
+def extract_issue_id_from_formula(formula: str) -> str | None:
+    """Extract ISSUE-12345 from an Excel hyperlink formula."""
+    match = re.search(r'"(ISSUE-\d+)"\)$', str(formula))
+    return match.group(1) if match else None
 
 
 def remove_existing_reports(
     tracker_df: pd.DataFrame,
-    existing_issue_numbers: list[int]
+    existing_issue_ids: set[str],
 ) -> pd.DataFrame:
-    """
-    Removes reports that already exist in the audit tracker.
+    """Keep only issues not already present in the tracker."""
 
-    Args:
-        tracker_df:
-            Data prepared for export.
-
-        existing_issue_numbers:
-            Issue numbers already present in the tracker.
-
-    Returns:
-        DataFrame containing only new reports.
-    """
-
-    if not existing_issue_numbers:
-        return tracker_df.reset_index(drop=True)
+    issue_ids = tracker_df["Issue"].apply(extract_issue_id_from_formula)
 
     new_reports = tracker_df[
-        ~tracker_df["Issue Number"].isin(existing_issue_numbers)
+        ~issue_ids.isin(existing_issue_ids)
     ]
 
     return new_reports.reset_index(drop=True)

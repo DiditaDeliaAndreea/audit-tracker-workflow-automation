@@ -1,68 +1,45 @@
-import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 import pandas as pd
 
+
 BASE_ISSUE_URL = "https://connecthub.demo/issues/"
+OBSERVATIONS_TEMPLATE = (
+    "Review the reported issue and document the audit findings here."
+)
 
 
 def generate_hyperlink(issue_id: str) -> str:
-    """
-    Creates a Google Sheets / Excel hyperlink.
-    """
-
-    return f'=HYPERLINK("{BASE_ISSUE_URL}{issue_id}", "{issue_id}")'
-
-
-def extract_issue_number(issue_id: str) -> int:
-    """
-    ISSUE-48321 -> 48321
-    """
-
-    match = re.search(r"\d+", issue_id)
-
-    if match:
-        return int(match.group())
-
-    return None
+    """Create a clickable Excel hyperlink formula."""
+    issue_url = f"{BASE_ISSUE_URL}{issue_id}"
+    return f'=HYPERLINK("{issue_url}", "{issue_id}")'
 
 
 def prepare_tracker_data(reports_df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Builds the dataframe that will be exported
-    to the audit tracker.
-    """
+    """Prepare filtered reports in the audit tracker format."""
 
     tracker_df = reports_df.copy()
 
-    tracker_df["Issue Number"] = (
-        tracker_df["issue_id"]
-        .apply(extract_issue_number)
-    )
+    tracker_df["Exported Date"] = datetime.now(
+        ZoneInfo("Europe/Dublin")
+    ).strftime("%Y-%m-%d")
 
-    tracker_df["Issue"] = (
-        tracker_df["issue_id"]
-        .apply(generate_hyperlink)
-    )
+    tracker_df["Issue"] = tracker_df["issue_id"].apply(generate_hyperlink)
+    tracker_df["Auditor Name"] = ""
+    tracker_df["Team Name"] = tracker_df["team"]
+    tracker_df["Area"] = tracker_df["area"]
+    tracker_df["Audit Outcome"] = ""
+    tracker_df["Observations"] = OBSERVATIONS_TEMPLATE
 
-    tracker_df = tracker_df[
+    return tracker_df[
         [
-            "Issue Number",
+            "Exported Date",
             "Issue",
-            "created_date",
-            "team",
-            "area",
-            "title",
-            "tags",
+            "Auditor Name",
+            "Team Name",
+            "Area",
+            "Audit Outcome",
+            "Observations",
         ]
     ]
-
-    tracker_df.columns = [
-        "Issue Number",
-        "Issue",
-        "Created Date",
-        "Team",
-        "Area",
-        "Title",
-        "Tags",
-    ]
-
-    return tracker_df

@@ -1,23 +1,19 @@
 """
-Maps operational teams to their corresponding audit tracker names.
+Maps operational teams to the worksheet name
+within the audit tracker workbook.
 """
 
 TEAM_MAPPING = {
     "Trust & Safety": "Trust & Safety",
     "Moderation": "Moderation",
     "Engineering": "Engineering",
-    "Billing": "Billing"
+    "Billing": "Billing",
 }
 
 
-def get_tracker_name(team: str) -> str:
+def get_sheet_name(team: str) -> str:
     """
-    Returns the audit tracker associated with a team.
-
-    Args:
-        team: Name of the operational team.
-
-    Returns:
-        Tracker name used for exporting reports.
+    Returns the worksheet name for a team.
     """
-    return TEAM_MAPPING.get(team, "Unassigned Tracker")
+
+    return TEAM_MAPPING.get(team, "Unassigned")
