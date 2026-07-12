@@ -38,7 +38,7 @@ The automation performs the complete workflow automatically.
 4. Extract eligible issue reports
 5. Group reports by operational team
 6. Prepare tracker-ready datasets
-7. Generate clickable issue report hyperlinks
+7. Generate clickable issue links
 8. Read existing tracker entries
 9. Detect previously exported issues
 10. Insert only new reports
@@ -47,7 +47,7 @@ The automation performs the complete workflow automatically.
 
 ---
 
-# Workflow Architecture
+## Workflow Architecture
 
 ![Workflow Architecture](docs/images/Manual-vs-Automated-Workflow-(business-value).png)
 
@@ -59,7 +59,7 @@ The automation performs the complete workflow automatically.
 
 ---
 
-# Repository Structure
+## Repository Structure
 
 ```text
 audit-tracker-workflow-automation/
@@ -78,8 +78,8 @@ audit-tracker-workflow-automation/
 │   │   └── audit_tracker_demo.xlsx
 │   │
 │   ├── scheduler/
+│   │   ├── notebook_schedule.json
 │   │   └── schedule.md
-│   │   └── notebook_schedule.json
 │   │
 │   ├── sql/
 │   │   └── filter_reports.sql
@@ -97,14 +97,16 @@ audit-tracker-workflow-automation/
 ├── docs/
 │   └── images/
 │
+├── requirements.txt
+│
 └── README.md
 ```
 
 ---
 
-# Demo Workflow
+## Demo Workflow
 
-```
+```text
                  Scheduled Workflow
                         │
                         ▼
@@ -132,7 +134,7 @@ audit-tracker-workflow-automation/
              Remove Duplicate Reports
                         │
                         ▼
-      Generate Clickable Issue Reports
+            Generate Clickable Issue Links
                         │
                         ▼
          Update Team Worksheets in Excel
@@ -143,7 +145,7 @@ audit-tracker-workflow-automation/
 
 ---
 
-# Scheduling
+## Scheduling
 
 In production, the workflow was configured using the notebook platform's built-in scheduler.
 
@@ -164,7 +166,51 @@ python demo/src/run_workflow.py
 
 ---
 
-# Technologies
+## How to Run
+
+### Clone the repository
+
+```bash
+git clone https://github.com/DiditaDeliaAndreea/audit-tracker-workflow-automation.git
+cd audit-tracker-workflow-automation
+```
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Create the demo database
+
+```bash
+python demo/database/create_database.py
+```
+
+### Generate sample issue reports
+
+```bash
+python demo/database/generate_bug_reports.py
+```
+
+### Execute the workflow
+
+```bash
+python demo/src/run_workflow.py
+```
+
+The workflow will:
+
+- Extract eligible reports from the SQLite database.
+- Apply SQL business rules.
+- Prepare tracker-ready datasets.
+- Prevent duplicate exports.
+- Update the audit tracker workbook.
+- Generate a processing summary.
+
+---
+
+## Technologies
 
 - Python
 - SQL
@@ -176,7 +222,7 @@ python demo/src/run_workflow.py
 
 ---
 
-# Features
+## Features
 
 - SQL business rule filtering
 - Dynamic weekly reporting period
@@ -191,32 +237,33 @@ python demo/src/run_workflow.py
 
 ---
 
-# Engineering Decisions
+## Project Architecture
 
 The project follows a modular architecture where each module has a single responsibility.
 
 | Module | Responsibility |
-|---|---|
+|---------|----------------|
 | `create_database.py` | Creates and populates the SQLite database used to simulate the production data source. |
 | `generate_bug_reports.py` | Generates fictional employee issue report pages linked from the audit tracker. |
 | `filter_reports.sql` | Applies the SQL business rules used to identify reports eligible for auditing. |
-| `load_reports.py` | Connects to SQLite, executes the supplied SQL query and returns the result as a Pandas DataFrame. |
-| `extract_reports.py` | Reads the configured SQL file and coordinates report extraction. |
+| `load_reports.py` | Connects to SQLite, executes the supplied SQL query and returns the results as a Pandas DataFrame. |
+| `extract_reports.py` | Reads the configured SQL query and coordinates report extraction. |
 | `group_by_team.py` | Groups extracted reports by operational team. |
-| `prepare_tracker_data.py` | Builds tracker-ready datasets, including hyperlinks and default audit fields. |
-| `team_mapping.py` | Maps operational teams to Excel worksheets. |
-| `deduplicate_reports.py` | Prevents duplicate report exports. |
-| `excel_tracker.py` | Handles workbook, worksheet, header and row-insertion operations. |
-| `run_workflow.py` | Orchestrates the complete workflow and prints the execution summary. |
+| `prepare_tracker_data.py` | Builds tracker-ready datasets by generating hyperlinks and populating the audit tracker columns. |
+| `team_mapping.py` | Maps operational teams to their corresponding Excel worksheet. |
+| `deduplicate_reports.py` | Prevents duplicate report exports by comparing extracted reports with existing tracker entries. |
+| `excel_tracker.py` | Handles Excel workbook operations, including worksheet management, headers and row insertion. |
+| `run_workflow.py` | Orchestrates the complete workflow from report extraction through tracker update and execution summary. |
+
 ---
 
-# Issue Reports
+## Issue Reports
 
 Each exported issue contains a clickable hyperlink that opens a generated issue report.
 
 The reports simulate operational issues submitted by employees through an internal reporting system.
 
-Each report includes:
+Each report contains:
 
 - Issue ID
 - Title
@@ -235,35 +282,59 @@ Each report includes:
 
 ---
 
-# Results
+## Results
 
 Compared to the manual process, the automation:
 
-- Eliminates repetitive copy-and-paste work
-- Applies consistent SQL filtering
-- Automatically routes reports to the correct team
-- Prevents duplicate exports
-- Produces tracker-ready worksheets
-- Generates clickable issue reports
-- Reduces preparation from a repetitive manual process to a single workflow execution
+- Eliminates repetitive copy-and-paste work.
+- Applies consistent SQL business rules.
+- Automatically routes reports to the correct team.
+- Prevents duplicate exports.
+- Produces tracker-ready worksheets.
+- Generates clickable issue reports.
+- Reduces preparation from a repetitive manual task to a single workflow execution.
 
 ---
 
-# Skills Demonstrated
+## Skills Demonstrated
 
 - Python Automation
 - SQL Development
 - Data Processing with Pandas
 - Workflow Automation
 - Process Improvement
-- Software Design
-- Data Validation
 - Excel Automation
+- Data Validation
+- Software Design
 - Technical Documentation
 
 ---
 
-# Disclaimer
+## Screenshots
+
+### Workflow Architecture
+
+![Workflow Architecture](docs/images/workflow-architecture.png)
+
+### Manual vs Automated Process
+
+![Before vs After](docs/images/before-after.png)
+
+### Audit Tracker
+
+_Add screenshot here_
+
+### Issue Report
+
+_Add screenshot here_
+
+### Workflow Execution
+
+_Add terminal output screenshot here_
+
+---
+
+## Disclaimer
 
 This repository is a public engineering demonstration inspired by a production workflow.
 
