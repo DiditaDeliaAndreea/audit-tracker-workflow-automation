@@ -2,9 +2,9 @@
 
 ## Overview
 
-This repository demonstrates a production-inspired Python workflow automation that prepares weekly audit trackers by automatically extracting operational reports, applying business rules, preparing tracker-ready datasets and updating team-specific audit worksheets.
+This repository demonstrates a production-inspired Python automation that prepares weekly audit trackers by automatically extracting operational reports, applying business rules, routing reports to the correct audit team and updating a multi-sheet audit tracker.
 
-The original solution was implemented as a scheduled Python notebook within an internal environment. This public project recreates the engineering workflow using SQLite, SQL, Pandas and Excel while excluding all proprietary code, internal systems and confidential business logic.
+The original solution was implemented as a scheduled Python notebook within an internal environment. This public version recreates the engineering workflow using SQLite, SQL, Pandas and Excel while excluding all proprietary systems, confidential data and internal business logic.
 
 ---
 
@@ -12,18 +12,17 @@ The original solution was implemented as a scheduled Python notebook within an i
 
 The audit preparation process was previously performed manually every week.
 
-The workflow required:
+The workflow required analysts to:
 
-- Extracting operational reports
-- Applying business filtering rules
-- Separating reports by operational team
-- Copying reports into team audit trackers
-- Creating report hyperlinks
-- Checking for already audited reports
-- Preventing duplicate entries
-- Preparing trackers before auditors started work
+- Open the operational dashboard
+- Apply business filters
+- Review eligible issue reports
+- Copy issue identifiers
+- Paste reports into the correct audit tracker
+- Repeat the process for each operational team
+- Prevent duplicate audit entries manually
 
-The manual process was repetitive, time-consuming and susceptible to copy-paste errors.
+The process was repetitive, time-consuming and susceptible to copy-and-paste errors.
 
 ---
 
@@ -33,186 +32,236 @@ The automation performs the complete workflow automatically.
 
 ### Workflow
 
-1. Execute SQL query against the operational data source
-2. Apply business rule filtering
-3. Extract eligible reports
-4. Group reports by operational team
-5. Prepare tracker-ready datasets
-6. Generate report hyperlinks
-7. Read existing tracker data
-8. Detect previously exported reports
-9. Insert only new reports
-10. Update the appropriate team worksheet
-11. Print an execution summary
+1. Execute the scheduled workflow
+2. Query the operational data source
+3. Apply SQL business rules
+4. Extract eligible issue reports
+5. Group reports by operational team
+6. Prepare tracker-ready datasets
+7. Generate clickable issue report hyperlinks
+8. Read existing tracker entries
+9. Detect previously exported issues
+10. Insert only new reports
+11. Update the appropriate team worksheet
+12. Produce an execution summary
 
 ---
 
-## Workflow Architecture
+# Workflow Architecture
 
-![Workflow Architecture](docs/images/Workflow-Architecture-(technical).png)
-
----
-
-## Before vs After
-
-![Before vs After](docs/images/Manual-vs-Automated-Workflow-(business-value).png)
+![Workflow Architecture](docs/images/workflow-architecture.png)
 
 ---
 
-## Repository Structure
+# Manual vs Automated Process
+
+![Before vs After](docs/images/before-after.png)
+
+---
+
+# Repository Structure
 
 ```text
-demo/
+audit-tracker-workflow-automation/
 │
-├── database/
-│   ├── create_database.py
-│   └── connecthub_demo.db
+├── demo/
+│   ├── bug_reports/
+│   │   ├── ISSUE-xxxxx.html
+│   │   └── ...
+│   │
+│   ├── database/
+│   │   ├── connecthub_demo.db
+│   │   ├── create_database.py
+│   │   └── generate_bug_reports.py
+│   │
+│   ├── output/
+│   │   └── audit_tracker_demo.xlsx
+│   │
+│   ├── scheduler/
+│   │   └── schedule.md
+│   │
+│   ├── sql/
+│   │   └── filter_reports.sql
+│   │
+│   └── src/
+│       ├── deduplicate_reports.py
+│       ├── excel_tracker.py
+│       ├── extract_reports.py
+│       ├── group_by_team.py
+│       ├── prepare_tracker_data.py
+│       ├── run_workflow.py
+│       └── team_mapping.py
 │
-├── output/
-│   └── audit_tracker_demo.xlsx
+├── docs/
+│   └── images/
 │
-├── sql/
-│   └── filter_reports.sql
-│
-└── src/
-    ├── deduplicate_reports.py
-    ├── excel_tracker.py
-    ├── extract_reports.py
-    ├── group_by_team.py
-    ├── prepare_tracker_data.py
-    ├── run_workflow.py
-    └── team_mapping.py
+└── README.md
 ```
 
 ---
 
-## Project Workflow
+# Demo Workflow
 
 ```
-SQLite Database
-        │
-        ▼
-SQL Filtering
-        │
-        ▼
-Extract Reports
-        │
-        ▼
-Group by Team
-        │
-        ▼
-Prepare Tracker Data
-        │
-        ▼
-Open Audit Tracker
-        │
-        ▼
-Read Existing Reports
-        │
-        ▼
-Remove Duplicates
-        │
-        ▼
-Update Team Worksheet
-        │
-        ▼
-Processing Summary
+                 Scheduled Workflow
+                        │
+                        ▼
+              SQLite Demo Database
+                        │
+                        ▼
+              SQL Business Filtering
+                        │
+                        ▼
+                 Extract Reports
+                        │
+                        ▼
+                 Group by Team
+                        │
+                        ▼
+            Prepare Tracker Dataset
+                        │
+                        ▼
+            Open Audit Tracker Workbook
+                        │
+                        ▼
+          Read Existing Tracker Entries
+                        │
+                        ▼
+             Remove Duplicate Reports
+                        │
+                        ▼
+      Generate Clickable Issue Reports
+                        │
+                        ▼
+         Update Team Worksheets in Excel
+                        │
+                        ▼
+               Processing Summary
 ```
 
 ---
 
-## Technologies
+# Scheduling
+
+In production, the workflow was configured using the notebook platform's built-in scheduler.
+
+**Schedule**
+
+- Frequency: Weekly
+- Day: Monday
+- Time: 12:00 PM
+- Time Zone: Europe/Dublin
+
+The SQL query retrieves reports created during the previous Monday–Sunday reporting period regardless of the execution date.
+
+For this public demonstration, the workflow is executed manually:
+
+```bash
+python demo/src/run_workflow.py
+```
+
+---
+
+# Technologies
 
 - Python
 - SQL
 - SQLite
 - Pandas
 - OpenPyXL
+- HTML
 - VS Code
 
 ---
 
-## Features
+# Features
 
-- Automated SQL data extraction
-- Business rule filtering
-- Team-based report routing
-- Dynamic report hyperlink generation
-- Duplicate detection
-- Multi-sheet audit tracker updates
+- SQL business rule filtering
+- Dynamic weekly reporting period
+- Team-based routing
+- Multi-sheet audit tracker
 - Automatic worksheet creation
-- Header management
+- Clickable issue report pages
+- Duplicate detection
+- Incremental tracker updates
 - Processing summary
 - Modular architecture
 
 ---
 
-## Engineering Decisions
+# Engineering Decisions
 
-This project follows a modular architecture where each module has a single responsibility.
+The project follows a modular architecture where each module has a single responsibility.
 
 | Module | Responsibility |
-|---------|----------------|
-| extract_reports.py | Executes SQL and retrieves reports |
-| group_by_team.py | Splits reports by operational team |
-| prepare_tracker_data.py | Builds tracker-ready datasets |
-| team_mapping.py | Maps teams to tracker worksheets |
-| deduplicate_reports.py | Prevents duplicate report exports |
-| excel_tracker.py | Handles Excel workbook operations |
-| run_workflow.py | Orchestrates the complete automation |
+|----------|----------------|
+| `extract_reports.py` | Executes SQL queries and retrieves reports |
+| `group_by_team.py` | Groups reports by operational team |
+| `prepare_tracker_data.py` | Builds tracker-ready datasets |
+| `team_mapping.py` | Maps teams to Excel worksheets |
+| `deduplicate_reports.py` | Prevents duplicate report exports |
+| `excel_tracker.py` | Handles Excel workbook operations |
+| `run_workflow.py` | Orchestrates the complete workflow |
 
 ---
 
-## Example Output
+# Issue Reports
 
-The automation updates a multi-sheet audit tracker.
+Each exported issue contains a clickable hyperlink that opens a generated issue report.
 
-Each worksheet represents one operational team.
+The reports simulate operational issues submitted by employees through an internal reporting system.
 
-Example worksheets:
+Each report includes:
 
-- Trust & Safety
-- Moderation
-- Engineering
-- Billing
-
-Only reports that have not been previously exported are inserted.
-
-New reports are always added at the top of the worksheet.
+- Issue ID
+- Title
+- Description
+- Environment
+- Steps to Reproduce
+- Expected Result
+- Actual Result
+- Severity
+- Priority
+- Supporting Evidence
+- Source URL
+- Reported By
+- Assigned Team
+- Status
 
 ---
 
-## Results
+# Results
 
 Compared to the manual process, the automation:
 
-- Eliminated manual copy-and-paste work
-- Prevented duplicate report exports
-- Applied consistent business filtering
-- Automatically routed reports to the correct team worksheet
-- Reduced preparation time from a manual task to a single workflow execution
-- Produced audit trackers ready for review before auditors started work
+- Eliminates repetitive copy-and-paste work
+- Applies consistent SQL filtering
+- Automatically routes reports to the correct team
+- Prevents duplicate exports
+- Produces tracker-ready worksheets
+- Generates clickable issue reports
+- Reduces preparation from a repetitive manual process to a single workflow execution
 
 ---
 
-## Skills Demonstrated
+# Skills Demonstrated
 
 - Python Automation
 - SQL Development
 - Data Processing with Pandas
 - Workflow Automation
 - Process Improvement
+- Software Design
 - Data Validation
-- Duplicate Detection
-- Software Architecture
+- Excel Automation
 - Technical Documentation
 
 ---
 
-## Disclaimer
+# Disclaimer
 
 This repository is a public engineering demonstration inspired by a production workflow.
 
-All report titles, issue identifiers, operational teams and business entities are fictional.
+All report titles, issue identifiers, employee reports, operational teams and business entities are fictional and created solely for demonstration purposes.
 
 No proprietary code, confidential business logic or internal systems are included.

@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "frequency": "Weekly",
+  "day": "Monday",
+  "time": "12:00",
+  "timezone": "Europe/Dublin"
+}
