@@ -49,13 +49,13 @@ The automation performs the complete workflow automatically.
 
 # Workflow Architecture
 
-![Workflow Architecture](docs/images/workflow-architecture.png)
+![Workflow Architecture](docs/images/Manual-vs-Automated-Workflow-(business-value).png)
 
 ---
 
 # Manual vs Automated Process
 
-![Before vs After](docs/images/before-after.png)
+![Before vs After](docs/images/Workflow-Architecture-(technical).png)
 
 ---
 
@@ -79,6 +79,7 @@ audit-tracker-workflow-automation/
 │   │
 │   ├── scheduler/
 │   │   └── schedule.md
+│   │   └── notebook_schedule.json
 │   │
 │   ├── sql/
 │   │   └── filter_reports.sql
