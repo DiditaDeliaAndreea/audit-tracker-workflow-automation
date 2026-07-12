@@ -89,6 +89,7 @@ audit-tracker-workflow-automation/
 │       ├── excel_tracker.py
 │       ├── extract_reports.py
 │       ├── group_by_team.py
+│       ├── load_reports.py
 │       ├── prepare_tracker_data.py
 │       ├── run_workflow.py
 │       └── team_mapping.py
@@ -199,6 +200,7 @@ The project follows a modular architecture where each module has a single respon
 | `extract_reports.py` | Executes SQL queries and retrieves reports |
 | `group_by_team.py` | Groups reports by operational team |
 | `prepare_tracker_data.py` | Builds tracker-ready datasets |
+| `load_reports.py` | Connects to the SQLite database, executes the supplied SQL query and returns the results as a Pandas DataFrame |
 | `team_mapping.py` | Maps teams to Excel worksheets |
 | `deduplicate_reports.py` | Prevents duplicate report exports |
 | `excel_tracker.py` | Handles Excel workbook operations |
