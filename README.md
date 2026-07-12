@@ -55,7 +55,7 @@ The automation performs the complete workflow automatically.
 
 ## Before vs After
 
-![Before vs After](docs/images/Manual-vs-Automated-Workflow-(business value).png)
+![Before vs After](docs/images/Manual-vs-Automated-Workflow-(business-value).png)
 
 ---
 
