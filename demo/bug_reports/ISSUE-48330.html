@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISSUE-48330 - Impersonation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 36px 20px;
+            background: #f3f4f6;
+            color: #1f2937;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 14px 20px;
+            background: #172554;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .demo-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .issue-header {
+            padding: 28px 30px;
+            background: white;
+            border-left: 1px solid #d1d5db;
+            border-right: 1px solid #d1d5db;
+        }
+
+        .issue-key {
+            margin-bottom: 8px;
+            color: #2563eb;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0;
+            color: #111827;
+            font-size: 28px;
+            line-height: 1.3;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-open {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-progress {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .major {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .minor {
+            background: #fef3c7;
+            color: #854d0e;
+        }
+
+        .trivial {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .priority {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+            gap: 22px;
+            padding: 24px;
+            background: #f8fafc;
+            border: 1px solid #d1d5db;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .main-column,
+        .side-column {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .card {
+            padding: 22px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .card h2 {
+            margin: 0 0 14px;
+            padding-bottom: 9px;
+            border-bottom: 2px solid #dbeafe;
+            color: #1e3a8a;
+            font-size: 17px;
+        }
+
+        .card p {
+            margin: 0;
+            line-height: 1.65;
+        }
+
+        .detail-row {
+            margin-bottom: 14px;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 4px;
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .value {
+            color: #111827;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        ol {
+            margin: 0;
+            padding-left: 22px;
+            line-height: 1.75;
+        }
+
+        a {
+            color: #2563eb;
+            word-break: break-all;
+        }
+
+        .evidence-box {
+            padding: 14px;
+            background: #f9fafb;
+            border: 1px dashed #9ca3af;
+            border-radius: 6px;
+        }
+
+        .footer-note {
+            margin-top: 16px;
+            color: #6b7280;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 760px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .top-bar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="top-bar">
+            <div class="product-name">ConnectHub Bug Tracking</div>
+            <div class="demo-label">Public portfolio demonstration</div>
+        </div>
+
+        <section class="issue-header">
+            <div class="issue-key">ISSUE-48330</div>
+            <h1>Impersonation</h1>
+
+            <div class="badges">
+                <span class="badge status-open">
+                    Open
+                </span>
+
+                <span class="badge minor">
+                    Severity: Minor
+                </span>
+
+                <span class="badge priority">
+                    Priority: Medium
+                </span>
+            </div>
+        </section>
+
+        <main class="content">
+            <div class="main-column">
+                <section class="card">
+                    <h2>Description</h2>
+                    <p>The impersonation report form allows submission without the required supporting evidence.</p>
+                </section>
+
+                <section class="card">
+                    <h2>Steps to Reproduce</h2>
+                    <ol><li>Open the reported profile.</li><li>Select Report User.</li><li>Choose Impersonation.</li><li>Leave the evidence field empty.</li><li>Submit the report.</li></ol>
+                </section>
+
+                <section class="card">
+                    <h2>Expected Result</h2>
+                    <p>The form should require supporting evidence before submission.</p>
+                </section>
+
+                <section class="card">
+                    <h2>Actual Result</h2>
+                    <p>The report is submitted successfully with no evidence attached.</p>
+                </section>
+
+                <section class="card">
+                    <h2>Evidence</h2>
+                    <div class="evidence-box">
+                        Screenshot of the successful submission with no evidence.
+                    </div>
+                </section>
+            </div>
+
+            <aside class="side-column">
+                <section class="card">
+                    <h2>Issue Details</h2>
+
+                    <div class="detail-row">
+                        <span class="label">Bug ID</span>
+                        <div class="value">ISSUE-48330</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Reported By</span>
+                        <div class="value">
+                            Demo QA Analyst
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Date Reported</span>
+                        <div class="value">2026-07-05 09:30:00</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Assigned To</span>
+                        <div class="value">
+                            Moderation Team
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Team</span>
+                        <div class="value">Moderation</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Area</span>
+                        <div class="value">User Reports</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Tags</span>
+                        <div class="value">review,identity</div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Environment</h2>
+
+                    <div class="detail-row">
+                        <span class="label">Platform</span>
+                        <div class="value">
+                            Web
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Operating System</span>
+                        <div class="value">
+                            Windows 11
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Browser / App</span>
+                        <div class="value">
+                            Firefox 128
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Source URL</h2>
+                    <a
+                        href="https://connecthub.example/report"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        https://connecthub.example/report
+                    </a>
+                </section>
+            </aside>
+        </main>
+
+        <div class="footer-note">
+            Fictional report generated for the Audit Tracker Workflow Automation portfolio.
+        </div>
+    </div>
+</body>
+</html>
