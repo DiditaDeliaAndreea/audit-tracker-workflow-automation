@@ -49,13 +49,13 @@ The automation performs the complete workflow automatically.
 
 ## Workflow Architecture
 
-![Workflow Architecture](docs/images/workflow-architecture.png)
+![Workflow Architecture](docs/images/Workflow-Architecture-(technical))
 
 ---
 
 ## Before vs After
 
-![Before vs After](docs/images/before-after.png)
+![Before vs After](docs/images/Manual-vs-Automated-Workflow-(business value))
 
 ---
 
