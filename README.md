@@ -312,25 +312,17 @@ Compared to the manual process, the automation:
 
 ## Screenshots
 
-### Workflow Architecture
-
-![Workflow Architecture](docs/images/workflow-architecture.png)
-
-### Manual vs Automated Process
-
-![Before vs After](docs/images/before-after.png)
-
 ### Audit Tracker
 
-_Add screenshot here_
+![Workflow Architecture](docs/images/Audit-Tracker.png)
 
 ### Issue Report
 
-_Add screenshot here_
+![Workflow Architecture](docs/images/Issue-Report.png)
 
 ### Workflow Execution
 
-_Add terminal output screenshot here_
+![Workflow Architecture](docs/images/terminal-output.png)
 
 ---
 
