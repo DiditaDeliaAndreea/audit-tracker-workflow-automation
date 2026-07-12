@@ -4,7 +4,7 @@ from pathlib import Path
 
 # Project paths
 BASE_DIR = Path(__file__).resolve().parents[1]
-DATABASE = BASE_DIR / "data" / "connecthub_demo.db"
+DATABASE = BASE_DIR / "database" / "connecthub_demo.db"
 SQL_FILE = BASE_DIR / "sql" / "filter_reports.sql"
 
 # Connect to database

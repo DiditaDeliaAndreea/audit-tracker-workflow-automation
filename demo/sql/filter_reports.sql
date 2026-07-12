@@ -1,15 +1,33 @@
+WITH reporting_period AS (
+    SELECT
+        date('now', 'weekday 1', '-14 days') AS week_start,
+        date('now', 'weekday 1', '-8 days') AS week_end
+)
+
 SELECT
-    report_id,
     issue_id,
-    reported_at,
-    reported_by,
-    issue_type,
-    severity,
-    status,
-    assigned_team
-FROM user_reports
-WHERE status = 'Open'
-  AND severity IN ('High', 'Medium')
+    created_date,
+    team,
+    area,
+    title,
+    tags
+FROM user_reports, reporting_period
+WHERE
+    status <> 'Closed'
+    AND team IN (
+        'Trust & Safety',
+        'Moderation',
+        'Engineering',
+        'Billing'
+    )
+    AND area IN (
+        'User Reports',
+        'Payments',
+        'Mobile App',
+        'Backend'
+    )
+    AND tags LIKE '%review%'
+    AND date(created_date) BETWEEN week_start AND week_end
 ORDER BY
-    assigned_team,
-    reported_at;
+    team,
+    created_date;
